@@ -15,8 +15,10 @@ Easiest way to run the metrics is via Docker image.
 # docker run -d -p 9243:9243              \
   -e API_URL=<chef_compliance_url>        \
   -e PORT=9243                            \
+  -e REFRESH_TOKEN=<your_refresh_token>   \
+  -e COMPLIANCE_USERNAME=<your_chef_user> \
   --name chef_compliance_metrics          \
-  eerkunt/prometheus_chef_compliance_exporter:0.1.0
+  eerkunt/prometheus_chef_compliance_exporter
 ```
 Then add a new [Prometheus][prometheus] target by changing prometheus.yml file ;
 
@@ -55,7 +57,10 @@ Install required packages ;
 Then run the exporter ;
 
 ```bash
-# PORT=9243 API_URL=<chef_compliance_url> nohup python chef_compliance.exporter.py
+# PORT=9243 API_URL=<chef_compliance_url> \
+  REFRESH_TOKEN=<your_refresh_token>      \
+  COMPLIANCE_USERNAME=<your_chef_user>    \
+  nohup python chef_compliance.exporter.py
 ```
 
 Then add a new [Prometheus][prometheus] target by changing prometheus.yml file ;
@@ -78,7 +83,9 @@ Please note that we run the exporter within the same host in Prometheus in this 
 | `API_URL` | Yes | | URL of Chef Compliance Server |
 | `PORT`| Yes | 9243 | Metrics server port |
 | `REFRESH_TOKEN`| *[1]* Yes | | Refresh token that is needed to auth Chef Compliance Server |
-| `WAIT_BETWEEN_METRIC_POLL` | No | 60 | Duration between to fetch metrics from Chef Compliance Server<br />Curious about why we need this ? Please refer to [FAQ][faq] |
+| `SLEEP_DURATION` | No | 60 | Duration between to fetch metrics from Chef Compliance Server<br />Curious about why we need this ? Please refer to [FAQ][faq] |
+| `COMPLIANCE_USERNAME` | No | `chef_compliance_exporter` | The username that is used in Chef Compliance |
+| `COMPLIANCE_ENVIRONMENT` | No | `default` | The environment that is used in Chef Compliance Scans |
 
 *[1]* `REFRESH_TOKEN`s are permanent to generate Auth Tokens for Chef Compliance Server. In order to find out your `REFRESH_TOKEN` please follow [API Documentation](https://docs.chef.io/api_compliance.html).
 
